@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ToDo List</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 400px;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    form {
+        display: flex;
+        margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+        flex: 1;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px 0 0 5px;
+        outline: none;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 0 5px 5px 0;
+        cursor: pointer;
+        outline: none;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    li .task-text {
+        flex: 1;
+        margin-right: 10px;
+    }
+
+    .completed {
+        text-decoration: line-through;
+        opacity: 0.5;
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>My To-Do List</h1>
+        <form id="todo-form">
+            <input type="text" id="todo-input" placeholder="Add new task..." required>
+            <button type="submit">Add</button>
+        </form>
+        <ul id="todo-list">
+            <!-- Tasks will be dynamically added here -->
+        </ul>
+    </div>
+
+    <script>
+        // Event listener for form submission
+        document.getElementById('todo-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const taskText = document.getElementById('todo-input').value.trim(); // Trim any whitespace
+
+            if (taskText === '') {
+                alert('Please enter a task.'); // Alert if input is empty
+                return;
+            }
+
+            // Create a new task item
+            const taskItem = document.createElement('li');
+            taskItem.innerHTML = `
+                <span class="task-text">${taskText}</span>
+                <button class="complete-btn">Complete</button>
+                <button class="edit-btn">Edit</button>
+                <button class="delete-btn">Delete</button>
+            `;
+            document.getElementById('todo-list').appendChild(taskItem); // Append task item to the list
+
+            // Clear the input field
+            document.getElementById('todo-input').value = '';
+        });
+
+        // Event delegation for handling complete, edit, delete buttons
+        document.getElementById('todo-list').addEventListener('click', function(event) {
+            const target = event.target;
+
+            if (target.classList.contains('complete-btn')) {
+                const taskText = target.parentElement.querySelector('.task-text');
+                taskText.classList.toggle('completed');
+            }
+
+            if (target.classList.contains('edit-btn')) {
+                const taskText = target.parentElement.querySelector('.task-text');
+                const newText = prompt('Edit task:', taskText.textContent.trim());
+
+                if (newText !== null && newText !== '') {
+                    taskText.textContent = newText;
+                }
+            }
+
+            if (target.classList.contains('delete-btn')) {
+                const taskItem = target.parentElement;
+                taskItem.remove();
+            }
+        });
+    </script>
+</body>
+</html>
